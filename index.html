@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Content Loader</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+        #content { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div id="content">Loading...</div>
+
+    <script>
+        // 获取当前URL的路径
+        const path = window.location.pathname;
+
+        // 如果路径是根路径，加载默认内容
+        if (path === '/' || path === '/index.html') {
+            document.getElementById('content').innerHTML = '<h1>Welcome</h1><p>Select a file to view its contents.</p>';
+        } else {
+            // 否则，尝试加载对应的文件内容
+            fetch(path)
+                .then(response => response.text())
+                .then(data => {
+                    // 检测内容类型并适当渲染
+                    if (path.endsWith('.md') || path.includes('/md/')) {
+                        // 如果是Markdown文件，你可能需要一个Markdown解析器
+                        document.getElementById('content').innerHTML = `<pre>${data}</pre>`;
+                    } else if (path.endsWith('.html') || path.includes('/html/')) {
+                        document.getElementById('content').innerHTML = data;
+                    } else {
+                        // 对于其他类型，以纯文本形式显示
+                        document.getElementById('content').innerHTML = `<pre>${data}</pre>`;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('content').innerHTML = `<p>Error loading content: ${error.message}</p>`;
+                });
+        }
+    </script>
+</body>
+</html>
