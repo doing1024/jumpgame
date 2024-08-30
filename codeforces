@@ -1,0 +1,3 @@
+var repo = gh.repo('521xueweihan/HelloGitHub');
+var somecommit = repo.commit(id = '95ddbcb');
+var answer = somecommit.year;
